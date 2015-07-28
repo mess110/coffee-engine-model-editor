@@ -10,18 +10,9 @@ class EditorScene extends BaseScene
     @controls = new THREE.OrbitControls(engine.camera)
     @control = new THREE.TransformControls(engine.camera, engine.renderer.domElement)
 
-  draw: (modelId) ->
-    json = ModelRepository.get().findById(modelId)
+  draw: (json) ->
     @removeModel() if @model?
     @addModel(json)
-
-  focus: (model) ->
-    @control.attach(model)
-    @scene.add @control
-
-  blur: () ->
-    @control.detach({})
-    @scene.remove @control
 
   addModel: (json) ->
     console.log "Drawing #{json.name}"
@@ -30,17 +21,18 @@ class EditorScene extends BaseScene
 
     for subModel in @model.children
       @domEvents.addEventListener(subModel, 'click', (event) ->
-        editorScene.focus(event.target)
+        console.log 'clicked'
       , false)
 
   removeModel: ->
     console.log "Removing #{@model.json.name}"
+    for subModel in @model.children
+      @domEvents.removeEventListener(subModel, 'click', () -> {})
     @scene.remove @model.mesh
-    @blur()
 
   tick: (tpf) ->
     return unless @loaded
-    @controls.update()
+    console.log 'hello'
 
   doMouseEvent: (event, raycaster) ->
 

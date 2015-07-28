@@ -1,7 +1,6 @@
 class JsonObject
   constructor: (json) ->
     @json = json
-    @currentIndex = 0
 
     throw 'name missing' unless json.name?
     @name = json.name

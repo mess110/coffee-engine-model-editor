@@ -16,11 +16,15 @@ class ModelRepository
 
       jNorthPole.getStorage { api_key: 'world', secret: 'world' }, responseHandler
 
-    save: (model, callback) ->
-      json = model.export()
+    save: (json, callback) ->
       json.api_key = 'world'
       json.secret = 'world'
       jNorthPole.putStorage json, callback
+
+    saveCurrent: ->
+      @save(editorScene.model.json, (data) ->
+        editorScene.draw(data)
+      )
 
     findById: (id) ->
       models = @models.filter (m) -> m.id == id

@@ -13,7 +13,6 @@
   ],
   "devDependencies": {
     "coffee-engine": "~0.0.34",
-    "threex.domevents": "jeromeetienne/threex.domevents",
-    "dat-gui": "~0.5.1"
+    "threex.domevents": "jeromeetienne/threex.domevents"
   }
 }

@@ -9,5 +9,22 @@ body {
   margin: 0px;
   padding: 0px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background-color: #000;
+  /* background-color: #000; */
+}
+
+#ui {
+  border-left: 1px dashed black;
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  right: 0px;
+}
+
+.label {
+  margin: 5px;
+}
+
+textarea {
+  height: 400px;
+  width: 100%;
 }
