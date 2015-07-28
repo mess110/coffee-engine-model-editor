@@ -12,16 +12,60 @@
         <div class="row">
             <div class="col-sm-12">
                 <input type="text" ng-model="search.name">
-                <span class="label label-default" ng-repeat="model in models | filter:search track by model.id" ng-click="load(model)">{{model.name}}</span>
+                <span class="label label-default" ng-repeat="model in models | filter:search track by model.id" ng-click="loadModel(model)">{{model.name}}</span>
+                <span class="label label-default" ng-click="newModel()">+</span>
             </div>
         </div>
         <br />
         <div class="row">
             <div class="col-sm-12">
-                <textarea class="" ng-model="selectedRaw"></textarea>
+                <input type="text" ng-model="hash.id" ng-readonly=true>
+                <input type="text" ng-model="hash.name">
+            </div>
+            <div class="col-sm-12">
+                <input type="text" ng-model="hash.position.x">
+                <input type="text" ng-model="hash.position.y">
+                <input type="text" ng-model="hash.position.z">
+            </div>
+            <div class="col-sm-12">
+                <input type="text" ng-model="hash.rotation.x">
+                <input type="text" ng-model="hash.rotation.y">
+                <input type="text" ng-model="hash.rotation.z">
+            </div>
+            <div class="col-sm-12">
+                <input type="text" ng-model="hash.scale.x">
+                <input type="text" ng-model="hash.scale.y">
+                <input type="text" ng-model="hash.scale.z">
+            </div>
+            <div class="col-sm-12" ng-repeat="subModel in hash.models">
+                <br />
+                <input type="text" ng-model="subModel.type">
+                <input type="text" ng-model="subModel.id" ng-readonly=true ng-show="subModel.type == 'json'">
+                <div class="col-sm-12">
+                    <input type="text" ng-model="subModel.position.x">
+                    <input type="text" ng-model="subModel.position.y">
+                    <input type="text" ng-model="subModel.position.z">
+                </div>
+                <div class="col-sm-12">
+                    <input type="text" ng-model="subModel.rotation.x">
+                    <input type="text" ng-model="subModel.rotation.y">
+                    <input type="text" ng-model="subModel.rotation.z">
+                </div>
+                <div class="col-sm-12">
+                    <input type="text" ng-model="subModel.scale.x">
+                    <input type="text" ng-model="subModel.scale.y">
+                    <input type="text" ng-model="subModel.scale.z">
+                </div>
+                <div class="col-sm-12">
+                    <input type="text" ng-model="subModel.material.type" ng-show="subModel.type == 'box'">
+                    <input type="text" ng-model="subModel.material.options.color" ng-show="subModel.type == 'box'">
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <textarea class="" ng-model="hashRaw"></textarea>
             </div>
             <div class="col-sm-12 text-center">
-                <button class="btn btn-default" ng-click="save()">save</button>
+                <button class="btn btn-default" ng-click="saveModel()">save</button>
             </div>
         </div>
     </div>
@@ -44,6 +88,5 @@
     <script src="ModelRepository.js"></script>
     <script src="EditorScene.js"></script>
     <script src="app.js"></script>
-    <script src="keyboardInput.js"></script>
   </body>
 </html>

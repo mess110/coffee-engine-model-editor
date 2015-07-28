@@ -21,19 +21,28 @@ angular.module('coffeeEngineModelEditor', ['ui.bootstrap'])
     )
   $scope.reload()
 
-  $scope.load = (model) ->
-    $scope.selectedRaw = JSON.stringify(model, null, 2)
+  callback = (json) ->
+    $scope.reload()
+    editorScene.draw(json)
+    $scope.hash = editorScene.model.json
+    $scope.hashRaw = angular.toJson($scope.hash, 2)
 
-  $scope.save = (model) ->
-    json = JSON.parse($scope.selectedRaw)
-    ModelRepository.get().save(json, ->
-      $scope.reload()
-      editorScene.draw(json)
-      $scope.selected = editorScene.model.json
-      $scope.selectedRaw = JSON.stringify($scope.selected, null, 2)
-    )
+  $scope.newModel = ->
+    ModelRepository.get().new(callback)
 
-  $scope.$watch 'selectedRaw', (newValue, oldValue) ->
+  $scope.saveModel = (model) ->
+    json = JSON.parse($scope.hashRaw)
+    ModelRepository.get().save(json, callback)
+
+  $scope.loadModel = (model) ->
+    $scope.hashRaw = angular.toJson(model, 2)
+
+  for i in ['name', 'position.x', 'position.y', 'position.z', 'rotation.x', 'rotation.y', 'rotation.z', 'scale.x', 'scale.y', 'scale.z']
+    $scope.$watch "hash.#{i}", (newValue, oldValue) ->
+      return unless newValue?
+      $scope.hashRaw = angular.toJson($scope.hash, 2)
+
+  $scope.$watch 'hashRaw', (newValue, oldValue) ->
     return unless newValue?
     try
       $scope.hash = JSON.parse(newValue)

@@ -10,6 +10,8 @@ class EditorScene extends BaseScene
     @controls = new THREE.OrbitControls(engine.camera)
     @control = new THREE.TransformControls(engine.camera, engine.renderer.domElement)
 
+    @loaded = true
+
   draw: (json) ->
     @removeModel() if @model?
     @addModel(json)
@@ -21,7 +23,7 @@ class EditorScene extends BaseScene
 
     for subModel in @model.children
       @domEvents.addEventListener(subModel, 'click', (event) ->
-        console.log 'clicked'
+        console.log event.target.json.zIndex
       , false)
 
   removeModel: ->
@@ -31,8 +33,6 @@ class EditorScene extends BaseScene
     @scene.remove @model.mesh
 
   tick: (tpf) ->
-    return unless @loaded
-    console.log 'hello'
 
   doMouseEvent: (event, raycaster) ->
 

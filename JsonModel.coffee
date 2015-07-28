@@ -6,6 +6,7 @@ class JsonModel
     throw 'id missing' unless json.id?
     throw 'name missing' unless json.name?
     console.log 'no models found' if json.models.length == 0
+    # TODO: check for invalid zIndex on models
 
     @mesh = new THREE.Object3D()
     i = 0

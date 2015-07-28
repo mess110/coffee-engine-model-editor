@@ -6,6 +6,22 @@ class ModelRepository
       @models = []
       jNorthPole.BASE_URL = 'https://json.northpole.ro/'
 
+    new: (callback) ->
+      json =
+        api_key: 'world'
+        secret: 'world'
+        name: 'untitled'
+        position: {x: 0, y: 0, z: 0}
+        rotation: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+        models: []
+      jNorthPole.createStorage json, callback
+
+    save: (json, callback) ->
+      json.api_key = 'world'
+      json.secret = 'world'
+      jNorthPole.putStorage json, callback
+
     load: (callback) ->
       responseHandler = (data) ->
         if data.length == 0
@@ -15,16 +31,6 @@ class ModelRepository
         callback(data)
 
       jNorthPole.getStorage { api_key: 'world', secret: 'world' }, responseHandler
-
-    save: (json, callback) ->
-      json.api_key = 'world'
-      json.secret = 'world'
-      jNorthPole.putStorage json, callback
-
-    saveCurrent: ->
-      @save(editorScene.model.json, (data) ->
-        editorScene.draw(data)
-      )
 
     findById: (id) ->
       models = @models.filter (m) -> m.id == id
