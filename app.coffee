@@ -11,6 +11,10 @@ editorScene = new EditorScene()
 engine.addScene(editorScene)
 engine.render()
 
+angular.fromOutside = (callback)->
+  scope = angular.element(document.body).scope()
+  scope.$apply callback(scope)
+
 angular.module('coffeeEngineModelEditor', ['ui.bootstrap'])
 
 .controller 'MainController', ($scope, $timeout) ->
@@ -20,6 +24,7 @@ angular.module('coffeeEngineModelEditor', ['ui.bootstrap'])
       $scope.$apply()
     )
   $scope.reload()
+  watchers = []
 
   callback = (json) ->
     $scope.reload()
@@ -37,10 +42,32 @@ angular.module('coffeeEngineModelEditor', ['ui.bootstrap'])
   $scope.loadModel = (model) ->
     $scope.hashRaw = angular.toJson(model, 2)
 
-  for i in ['name', 'position.x', 'position.y', 'position.z', 'rotation.x', 'rotation.y', 'rotation.z', 'scale.x', 'scale.y', 'scale.z']
-    $scope.$watch "hash.#{i}", (newValue, oldValue) ->
-      return unless newValue?
-      $scope.hashRaw = angular.toJson($scope.hash, 2)
+  $scope.setSelected = (i) ->
+    $scope.selected = i
+    reinitWatchers()
+
+  reinitWatchers = ->
+    for watch in watchers
+      watch()
+
+    for i in ['name', 'position.x', 'position.y', 'position.z', 'rotation.x', 'rotation.y', 'rotation.z', 'scale.x', 'scale.y', 'scale.z']
+      a = $scope.$watch "hash.#{i}", (newValue, oldValue) ->
+        return unless newValue?
+        $scope.hashRaw = angular.toJson($scope.hash, 2)
+      watchers.push a
+
+    if $scope.selected?
+      for i in ['name', 'position.x', 'position.y', 'position.z', 'rotation.x', 'rotation.y', 'rotation.z', 'scale.x', 'scale.y', 'scale.z']
+        a = $scope.$watch "hash.models[#{$scope.selected}].#{i}", (newValue, oldValue) ->
+          return unless newValue?
+          $scope.hashRaw = angular.toJson($scope.hash, 2)
+        watchers.push a
+
+      if $scope.hash.models[$scope.selected]? and $scope.hash.models[$scope.selected].type == 'box'
+        $scope.$watch "hash.models[#{$scope.selected}].material.options.color", (newValue, oldValue) ->
+          return unless newValue?
+          $scope.hashRaw = angular.toJson($scope.hash, 2)
+          watchers.push a
 
   $scope.$watch 'hashRaw', (newValue, oldValue) ->
     return unless newValue?
@@ -49,4 +76,5 @@ angular.module('coffeeEngineModelEditor', ['ui.bootstrap'])
     catch e
       console.log e
     finally
+      reinitWatchers()
       editorScene.draw($scope.hash)

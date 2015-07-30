@@ -14,6 +14,7 @@ class JsonModel
       mesh = Utils.getSubModel(subModel)
       @mesh.add mesh
       Utils.applyTransformations(mesh, subModel)
+
       mesh.json = subModel
       mesh.zIndex = i
       subModel.zIndex = i

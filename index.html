@@ -37,28 +37,30 @@
                 <input type="text" ng-model="hash.scale.y">
                 <input type="text" ng-model="hash.scale.z">
             </div>
-            <div class="col-sm-12" ng-repeat="subModel in hash.models">
-                <br />
-                <input type="text" ng-model="subModel.type">
-                <input type="text" ng-model="subModel.id" ng-readonly=true ng-show="subModel.type == 'json'">
+            <!-- this is needed because selected can have position 0 -->
+            <div ng-if="selected != undefined">
                 <div class="col-sm-12">
-                    <input type="text" ng-model="subModel.position.x">
-                    <input type="text" ng-model="subModel.position.y">
-                    <input type="text" ng-model="subModel.position.z">
+                    <input type="text" ng-model="hash.models[selected].type">
+                    <input type="text" ng-model="hash.models[selected].id" ng-if="hash.models[selected].type == 'json'">
                 </div>
                 <div class="col-sm-12">
-                    <input type="text" ng-model="subModel.rotation.x">
-                    <input type="text" ng-model="subModel.rotation.y">
-                    <input type="text" ng-model="subModel.rotation.z">
+                    <input type="text" ng-model="hash.models[selected].position.x">
+                    <input type="text" ng-model="hash.models[selected].position.y">
+                    <input type="text" ng-model="hash.models[selected].position.z">
                 </div>
                 <div class="col-sm-12">
-                    <input type="text" ng-model="subModel.scale.x">
-                    <input type="text" ng-model="subModel.scale.y">
-                    <input type="text" ng-model="subModel.scale.z">
+                    <input type="text" ng-model="hash.models[selected].rotation.x">
+                    <input type="text" ng-model="hash.models[selected].rotation.y">
+                    <input type="text" ng-model="hash.models[selected].rotation.z">
                 </div>
                 <div class="col-sm-12">
-                    <input type="text" ng-model="subModel.material.type" ng-show="subModel.type == 'box'">
-                    <input type="text" ng-model="subModel.material.options.color" ng-show="subModel.type == 'box'">
+                    <input type="text" ng-model="hash.models[selected].scale.x">
+                    <input type="text" ng-model="hash.models[selected].scale.y">
+                    <input type="text" ng-model="hash.models[selected].scale.z">
+                </div>
+                <div class="col-sm-12" ng-show="hash.models[selected].type == 'box'">
+                    <input type="text" ng-model="hash.models[selected].material.type">
+                    <input type="color" ng-model="hash.models[selected].material.options.color">
                 </div>
             </div>
             <div class="col-sm-12">
@@ -82,6 +84,7 @@
     <script src="vendor/TransformControls.js"></script>
     <script src="vendor/OrbitControls.js"></script>
     <script src="vendor/jnorthpole.js"></script>
+    <script src="vendor/shader.js"></script>
 
     <script src="JsonModel.js"></script>
     <script src="Utils.js"></script>

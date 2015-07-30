@@ -27,7 +27,17 @@ class Utils
     switch json.type
       when 'basic'
         json.options = defaultOptions unless json.options?
-        new THREE.MeshBasicMaterial(json.options)
+
+        materialColor = new (THREE.Color)(json.options.color)
+        phongMaterial = createShaderMaterial('phongDiffuse', editorScene.light)
+        phongMaterial.uniforms.uMaterialColor.value.copy materialColor
+        phongMaterial.side = THREE.DoubleSide
+
+        # new (THREE.ShaderMaterial)(
+          # vertexShader: $('#vertexshader').text()
+          # fragmentShader: $('#fragmentshader').text())
+        # new THREE.MeshBasicMaterial(json.options)
+        phongMaterial
       else
         new THREE.MeshBasicMaterial(defaultOptions)
 

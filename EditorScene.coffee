@@ -10,6 +10,13 @@ class EditorScene extends BaseScene
     @controls = new THREE.OrbitControls(engine.camera)
     @control = new THREE.TransformControls(engine.camera, engine.renderer.domElement)
 
+    @light = new THREE.DirectionalLight(0xffffff, 1.0)
+    @light.position.set(320, 390, 700)
+    @scene.add @light
+
+    light = new THREE.AmbientLight( 0x404040 );
+    @scene.add( light )
+
     @loaded = true
 
   draw: (json) ->
@@ -23,7 +30,10 @@ class EditorScene extends BaseScene
 
     for subModel in @model.children
       @domEvents.addEventListener(subModel, 'click', (event) ->
-        console.log event.target.json.zIndex
+
+        angular.fromOutside (scope) ->
+          scope.setSelected(event.target.json.zIndex)
+
       , false)
 
   removeModel: ->
@@ -35,5 +45,8 @@ class EditorScene extends BaseScene
   tick: (tpf) ->
 
   doMouseEvent: (event, raycaster) ->
+    return if event.type != 'mouseup'
+    angular.fromOutside (scope) ->
+      scope.setSelected(undefined)
 
   doKeyboardEvent: (event) ->
