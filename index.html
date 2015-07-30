@@ -40,7 +40,7 @@
             <!-- this is needed because selected can have position 0 -->
             <div ng-if="selected != undefined">
                 <div class="col-sm-12">
-                    <input type="text" ng-model="hash.models[selected].type">
+                    <select ng-options="type as type for type in allowedTypes" ng-model="hash.models[selected].type">
                     <input type="text" ng-model="hash.models[selected].id" ng-if="hash.models[selected].type == 'json'">
                 </div>
                 <div class="col-sm-12">
@@ -62,8 +62,18 @@
                     <input type="text" ng-model="hash.models[selected].material.type">
                     <input type="color" ng-model="hash.models[selected].material.options.color">
                 </div>
+                <div class="col-sm-12" ng-show="hash.models[selected].type == 'box'">
+                    <input type="text" ng-model="hash.models[selected].options.w">
+                    <input type="text" ng-model="hash.models[selected].options.h">
+                    <input type="text" ng-model="hash.models[selected].options.d">
+                </div>
             </div>
             <div class="col-sm-12">
+                <span class="label label-default" ng-click="addSubModel()">add</span>
+                <span ng-if="selected != undefined" class="label label-default" ng-click="cloneSelectedSubModel()">clone</span>
+                <span ng-if="selected != undefined" class="label label-default" ng-click="deleteSelectedSubModel()">delete</span>
+            </div>
+            <div class="col-sm-12" ng-show="false">
                 <textarea class="" ng-model="hashRaw"></textarea>
             </div>
             <div class="col-sm-12 text-center">

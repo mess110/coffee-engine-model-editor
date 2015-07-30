@@ -17,6 +17,19 @@ class ModelRepository
         models: []
       jNorthPole.createStorage json, callback
 
+    newSubModel: ->
+      {
+        type: 'box'
+        options: {w: 1, h: 1, d: 1}
+        position: {x: 0, y: 0, z: 0}
+        rotation: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+        material:
+          type: 'basic'
+          options:
+            color: '#ff0000'
+      }
+
     save: (json, callback) ->
       json.api_key = 'world'
       json.secret = 'world'

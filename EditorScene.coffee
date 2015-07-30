@@ -11,7 +11,7 @@ class EditorScene extends BaseScene
     @control = new THREE.TransformControls(engine.camera, engine.renderer.domElement)
 
     @light = new THREE.DirectionalLight(0xffffff, 1.0)
-    @light.position.set(320, 390, 700)
+    @light.position.set(0, 200, 400)
     @scene.add @light
 
     light = new THREE.AmbientLight( 0x404040 );

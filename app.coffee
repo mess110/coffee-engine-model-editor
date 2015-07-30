@@ -18,6 +18,8 @@ angular.fromOutside = (callback)->
 angular.module('coffeeEngineModelEditor', ['ui.bootstrap'])
 
 .controller 'MainController', ($scope, $timeout) ->
+  $scope.allowedTypes = ['json', 'box']
+  $scope.names = ['asd', 'bar']
   $scope.reload = ->
     ModelRepository.get().load((data) ->
       $scope.models = ModelRepository.get().models
@@ -39,6 +41,22 @@ angular.module('coffeeEngineModelEditor', ['ui.bootstrap'])
     json = JSON.parse($scope.hashRaw)
     ModelRepository.get().save(json, callback)
 
+  $scope.addSubModel = () ->
+    subModel = ModelRepository.get().newSubModel()
+    $scope.hash.models.push subModel
+    $scope.selected = $scope.hash.models.length - 1
+
+  $scope.cloneSelectedSubModel = () ->
+    return unless $scope.selected?
+    subModel = angular.copy($scope.hash.models[$scope.selected])
+    $scope.hash.models.push subModel
+    $scope.selected = $scope.hash.models.length - 1
+
+  $scope.deleteSelectedSubModel = ->
+    return unless $scope.selected?
+    $scope.hash.models.splice($scope.selected, 1)
+    $scope.selected = undefined
+
   $scope.loadModel = (model) ->
     $scope.hashRaw = angular.toJson(model, 2)
 
@@ -56,8 +74,14 @@ angular.module('coffeeEngineModelEditor', ['ui.bootstrap'])
         $scope.hashRaw = angular.toJson($scope.hash, 2)
       watchers.push a
 
+    a = $scope.$watch 'hash.models.length', (newValue, oldValue) ->
+      return if newValue == oldValue
+      console.log $scope.hash
+      $scope.hashRaw = angular.toJson($scope.hash, 2)
+    watchers.push a
+
     if $scope.selected?
-      for i in ['name', 'position.x', 'position.y', 'position.z', 'rotation.x', 'rotation.y', 'rotation.z', 'scale.x', 'scale.y', 'scale.z']
+      for i in ['id', 'type', 'name', 'position.x', 'position.y', 'position.z', 'rotation.x', 'rotation.y', 'rotation.z', 'scale.x', 'scale.y', 'scale.z', 'options.w', 'options.h', 'options.d']
         a = $scope.$watch "hash.models[#{$scope.selected}].#{i}", (newValue, oldValue) ->
           return unless newValue?
           $scope.hashRaw = angular.toJson($scope.hash, 2)
